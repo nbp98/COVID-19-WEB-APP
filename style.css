@@ -1,0 +1,58 @@
+h1, h2{
+    margin: auto;
+    padding: auto;
+    font-family: 'Aclonica';
+    color: royalblue;
+    height: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;   
+}
+p{
+    margin: auto;
+    padding: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;   
+    color: yellow;
+}
+img{
+    width: 60px;
+    height: 60px;                
+}
+
+#table-selected-button{
+    padding: auto;    
+    margin-left: 30px;    
+}
+#graphs-div{
+    padding-left: 370px;
+    margin-top: -70px;
+}
+#data-list-div{
+    max-width: 500px;
+}
+.mdc-list-item{
+    max-width: 500px;
+    text-align: center;
+    background-color: darkgray;
+}
+.mdc-list-item__text{
+    font-size: 20px;
+    text-align: center;
+    color: blue;
+}
+#page2-view{
+    padding-top: 90px;
+    padding-left: 10px;
+}
+#page1-view{
+    padding-top: 100px;
+    
+}
+body{
+    background-image: url(https://cdn.cnn.com/cnnnext/dam/assets/200320110619-coronavirus-animation-super-tease.jpg);
+    background-size: contain;
+}

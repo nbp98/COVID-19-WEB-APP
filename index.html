@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>COVID-19</title>
+    <!-- Link Extrenal Sources-->
+        <link rel="manifest" href="./site.webmanifest">
+        <link rel="stylesheet" type="text/css" href="./style.css">
+        <link rel="icon" href="./favicon.ico" type="image/x-icon">
+    <!-- MATERIALS COMPONENTS BUNDLE-->
+        <link href="https://unpkg.com/material-components-web@v4.0.0/dist/material-components-web.min.css" rel="stylesheet">
+        <script src="https://unpkg.com/material-components-web@v4.0.0/dist/material-components-web.min.js"></script>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <!-- BOOTSTRAP CDN -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <!-- FONTS -->
+        <script src="https://kit.fontawesome.com/9f400142ad.js" crossorigin="anonymous"></script>
+    <!-- GRAPHING -->
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <!-- STYLE -->    
+        <style>
+            :root{ --mdc-theme-primary: red;}
+        </style>
+    </head>
+    <body>
+    <!-- NAVIGATION BAR -->
+        <header class="mdc-top-app-bar">
+            <div class="mdc-top-app-bar__row">
+                <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
+                    <span class="mdc-top-app-bar__title" style="color: black;">
+                        <img id="thumb" src='./img/coronavirus.png' style='width: 125px;'><strong>COVID-19 Data Exploration</strong>
+                    </span>
+                </section>    
+                <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
+                    <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Home" href"#" onclick="replace('page2-view','page1-view')">home</button>      
+                    <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Search" href"#" onclick="replace1('page1-view','page2-view')">search</button>
+                    <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button" aria-label="Show Graph" href="#" onclick="replace2('page1-view','page2-view')">show_chart</button>
+                </section>  
+            </div>
+        </header>
+    <!-- INFORMATION -->
+        <div id="page1-view">
+            <div>
+                <a href="https://en.wikipedia.org/wiki/Coronavirus#/media/File:SARS-CoV-2_without_background.png"> </a>
+                <h1 style="font-size: 50px;">Introduction</h1>
+                <p style="font-size: 20px;"> This web application is imformation regarding this terribly <br> severe pandemic COVID-19, also known as Corona-Virus</p>            
+                <p style="font-size: 18px; color: yellow;"><strong>COVID-19 Data from:</strong><u>https://pomber.github.io/covid19/timeseries.json</u></p>            
+
+                <h2 style="font-size: 40px; color: lawngreen;">Instructions</h2>
+                <p style="font-size: 20px;">- Click the search icon in the upper right corner to search for countries,<br> and add them to a list to display confirmed cases over a 85 day period.</p>
+                <p style="font-size: 20px;">- Click the graph tab to display the graph of the countires that <br> have been selected, and after table displays in search tab</p>
+                <img style="height: 40%; width: 40%; margin-left: 30%; padding-top: 5%;" src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/SARS-CoV-2_without_background.png/1920px-SARS-CoV-2_without_background.png">    
+            </div>
+        </div>
+    <!-- DATALIST DIV -->
+        <div id='page2-view' style="display: none">
+            <div id="data-list-div">
+                <label id="inputLabel" style='color: blue;'><strong>Search Country: </strong></label>
+                <input list="country-choice-options" id="country-choice" name="country-choice" />        
+                <datalist id="country-choice-options"></datalist>
+                <button onclick="addCountryOnTable()" id="submitConutry" class="mdc-button foo-button mdc-button--raised" style="background-color: orange; color: black;">
+                    <div class="mdc-button__ripple "></div>
+                    <span class="mdc-button__label">Add Country</span>
+                </button>
+                <ul id='data-list-list' class="mdc-list"></ul>
+            </div>
+            <div id="table-selected-div">
+                <button id="table-selected-button" onclick="tableData()" class="mdc-button foo-button mdc-button--raised" style="background-color: aquamarine; color: black;">Get Table For All Countries</button>
+            </div>
+            <div id="clear-all-data">
+                <button id="clearList" class="mdc-button foo-button mdc-button--raised" style="background-color: red; color: black; left:40px; top:20px;">
+                    <div class="mdc-button__ripple "></div>
+                    <span class="mdc-button__label">Clear All Countries</span>
+                </button>
+            </div>
+            
+            <div id="graphs-div">
+                <div id='view_table' style='margin-top: 20px;'>
+                    <h5 style='text-align: start; color: orange; font-size: 35px;'><strong>Table</strong></h5>
+                    <div id="table">
+                    </div>
+                </div>
+                
+                <div id='view_graph' style='margin-top: 20px;'>
+                    <h5 style='text-align: start; color: orange; font-size: 35px;'><strong>Graph</strong></h5>
+                    <div id="curve_chart" style="width: 1000px; height: 600px;">
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer style="align-items: center">
+            <strong>Author:</strong> Neel Patel, IT202-Project4: COVID-19 DATA-App
+        </footer>
+    <!-- JAVASCRIPT -->
+        <script>
+            mdc.topAppBar.MDCTopAppBar.attachTo(document.querySelector('.mdc-top-app-bar'));
+            google.charts.load('current', {'packages':['table', 'corechart']});
+            google.charts.setOnLoadCallback(tableData);
+            google.charts.setOnLoadCallback(graphData);
+
+            let url = 'https://pomber.github.io/covid19/timeseries.json';
+            fetch(url)
+                .then((response) =>{
+                    return response.json();
+            })
+            .then((myJson) =>{
+                let dataList = document.getElementById('country-choice-options');
+                const countries = Object.keys(myJson);
+                for (i in countries){
+                    let opt = document.createElement('option');
+                    opt.setAttribute('value', countries[i]);
+                    dataList.appendChild(opt);
+                }
+            });
+            
+            function replace(hide, show){
+                document.getElementById(hide).style.display="none";
+                document.getElementById(show).style.display="block";
+            }
+
+            function replace1(hide, show){
+                document.getElementById(hide).style.display="none";
+                document.getElementById(show).style.display="block";
+                document.getElementById('view_table').style.display="block";
+                document.getElementById('view_graph').style.display="none";
+
+                tableData();
+            }
+            function replace2(hide, show){
+                document.getElementById(hide).style.display="none";
+                document.getElementById(show).style.display="block";
+                document.getElementById('view_graph').style.display="block";
+                document.getElementById('view_table').style.display="none";
+
+                graphData();
+            }
+            function addCountryOnTable(){
+                //Get/Create All Elements Neccesary
+                let ulist = document.getElementById('data-list-list');
+                let li = document.createElement('li');
+                let val = document.getElementById('country-choice');
+                let va = document.getElementById('data-list-list').getElementsByTagName('span');
+                let span = document.createElement('span');
+                //Check if list is not empty
+                if(val.value === '') return alert('List Cannot Be Empty!!');
+                //Iterate thru list and Check for duplicate items
+                for (i=0;i<va.length;i++){
+                    if (va[i].innerHTML == val.value){  
+                        val.value = ''; //EMPTY input form 
+                        alert('WARNING: Please select a country option that is not already on the list!'); // Cause alert 
+                        return; // Break
+                    }
+                }
+                // If ALL Passes 
+                ulist.appendChild(li); // Append List item
+                li.appendChild(span); // Append span item to list item 
+                span.innerHTML = val.value; // Set text of List span item 
+                // Change attributes to make it a Materials Component
+                span.setAttribute('class','mdc-list-item__text');
+                li.setAttribute('class', 'mdc-list-item');
+                //Clear input form value
+                val.value = ''; 
+            }
+            
+            //Button click to clear all elements from List of countries
+            document.getElementById('clearList').addEventListener('click', function(clearList) {
+                $('#data-list-list span').parent().remove(); //Remove List item which is the PARENT of Span item
+            });
+            
+            //Table Data Function
+            function tableData() {
+                // Create new tables/variables
+                var data = new google.visualization.DataTable();
+                var graph_data = new google.visualization.DataTable();
+                var jsonData;
+                //FETCH DATA
+                fetch(url)
+                    .then( (response) =>{
+                        return response.json();
+                    })
+                    .then((myJson) =>{
+                        let va = document.getElementById('data-list-list').getElementsByTagName('span'); //GET TEXT VALUES FROM LIST
+                        var countries = {};
+
+                        for (i = 0; i < va.length; i ++) {
+                            var key = va[i].innerHTML;
+                            countries[key] = myJson[key]; //save in new json object 
+                        }
+                        jsonData = myJson;
+                        return countries; 
+                    })
+                    .then((countries) => {
+                        var allDate = jsonData['Afghanistan'];  //Use as default value to add all dates
+                        data.addColumn('string', 'Date');
+                        data.addRows(allDate.length);
+                        for (i = 0; i < allDate.length; i ++) { // ADD values for all dates
+                            data.setCell(i, 0, allDate[i].date);
+                        }
+                        for (i = 0; i < Object.keys(countries).length; i ++) { // ADD Country Name Column  
+                            var countryName = Object.keys(countries)[i];
+                            data.addColumn('number', countryName);
+                            for (j = 0; j < allDate.length; j ++) { // ADD all Cases from json obj
+                                var countryInfo = countries[countryName][j];
+                                data.setCell(j, i + 1, countryInfo['confirmed']);
+                            }
+                        }
+                        var table = new google.visualization.Table(document.getElementById('table')); 
+                        table.draw(data, {showRowNumber: false, height: '100%'});    // Draw table 
+
+                        graphData(); // Graph data at the same time 
+                    })
+
+            }
+
+            function graphData() {
+                var graph_data = new google.visualization.DataTable();
+                var jsonData;
+                fetch(url)
+                .then( (response) =>{
+                    return response.json();
+                })
+                .then((myJson) =>{
+                    let va = document.getElementById('data-list-list').getElementsByTagName('span');
+                    var countries = {};
+
+                    for (i = 0; i < va.length; i ++) {
+                        var key = va[i].innerHTML;
+                        countries[key] = myJson[key];
+                    }
+                    jsonData = myJson;
+                    return countries;
+                })
+                .then((countries) => {
+                    var allDate = jsonData['Afghanistan'];
+                    graph_data.addColumn('string', 'Date');
+                    graph_data.addRows(allDate.length);
+                    for (i = 0; i < allDate.length; i ++) {
+                        graph_data.setCell(i, 0, allDate[i].date);
+                    }
+                    for (i = 0; i < Object.keys(countries).length; i ++) {
+                        var countryName = Object.keys(countries)[i];
+                        graph_data.addColumn('number', countryName);
+                        for (j = 0; j < allDate.length; j ++) {
+                            var countryInfo = countries[countryName][j];
+                            graph_data.setCell(j, i + 1, countryInfo['confirmed']);
+                        }
+                    }
+
+                    var options = {
+                        title: 'Covid-19 Cases',
+                        hAxis: { title: 'Date' },
+                        vAxis: { title: 'Confirmed Count' },
+                        legend: { position: 'bottom' },
+                    };
+
+                    var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+
+                    chart.draw(graph_data, options);
+                })
+            }
+
+        </script>
+        
+    <!-- BOOTSTRAP jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>    
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>    
+    <!-- GLOBAL JS FILE -->
+        <script>
+            //Service worker registration.
+            if ('serviceWorker' in navigator){
+                console.log('CLIENT: service worker registration in progress.');
+                navigator.serviceWorker.register('./sw.js');
+            }
+        </script>
+    </body>
+</html>
